@@ -1,6 +1,17 @@
-import React, { ButtonHTMLAttributes, ChangeEvent, ChangeEventHandler, EventHandler, MouseEventHandler, useEffect } from 'react';
-import logo from './logo.svg';
+import React, { ChangeEvent, ChangeEventHandler, MouseEventHandler, useEffect } from 'react';
 import './App.css';
+import { Checkbox } from '@mui/material';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import IconButton from '@mui/material/IconButton';
+import { BorderColor, Delete, Done } from '@mui/icons-material';
 
 var CustomMap: { [key: string]: any } = {};
 function App() {
@@ -86,32 +97,49 @@ function App() {
   return (
     <div className="App">
       <header>
-        <h2> React todo list with Typescript</h2>
+        <h2> </h2>
       </header>
       <div>
         <div>
           <div className='TodoArea'>
+          <Card sx={{ minWidth: 275 }}>
+          <Typography sx={{ fontSize: 18 }} color="text.secondary" gutterBottom>
+            React todo list with Typescript & MUI
+            <hr />
+          </Typography>
+            <CardContent>
             <div>
-              <input type='text' placeholder='enter todo' onChange={handleChange} value={todo} />
-              <button onClick={enterTodo}> Save</button>  
+              <TextField id="standard-basic" label="Enter todo" variant="standard"  onChange={handleChange} value={todo} />
             </div>
-            <ul>
+            <div style={{ marginTop: 20}}>
+              <Button variant="contained" onClick={enterTodo}>Add todo </Button>
+            </div>
+            <List>
               {todoList.map( (t:string, idx: number) => (
-                <div className='Todo' key={idx}>
-                  {doneMap[idx] ? (
-                    <input type='checkbox' checked value={""+idx} onChange={markDoneChange} />
-                  ): (
-                    <input type='checkbox' value={""+idx} onChange={markDoneChange} />
-                  )}
-                  <li> {t} </li> 
-                  <p style={{marginLeft: 10}}>
-                    <button value={""+idx} onClick={editTodo}> Edit</button>
-                    <button style={{marginLeft: 10}} value={""+idx} onClick={deleteTodo}> Delete</button>
-                    <button style={{marginLeft: 10}} value={""+idx} onClick={markDone}> Done</button>
-                  </p>
-                </div>
+                <ListItem>
+                  <ListItemIcon>
+                    <Checkbox
+                      value={"" + idx}
+                      edge="start"
+                      checked={doneMap[idx] ? true: false}
+                      tabIndex={-1}
+                      disableRipple
+                      onChange={markDoneChange}
+                      />
+                  </ListItemIcon>
+                  <ListItemText primary={t} />
+                  <IconButton value={""+idx} onClick={editTodo}>
+                      <BorderColor />
+                  </IconButton>
+                  <IconButton style={{marginLeft: 10}} value={""+idx} onClick={deleteTodo}>
+                    <Delete />
+                  </IconButton>
+                </ListItem>
               ))}
-            </ul>
+
+            </List>
+            </CardContent>
+            </Card>
           </div>
         </div>
       </div>
