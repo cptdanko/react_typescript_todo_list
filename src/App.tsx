@@ -11,9 +11,13 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import IconButton from '@mui/material/IconButton';
-import { BorderColor, Delete, Done } from '@mui/icons-material';
+import { DeleteRounded } from '@mui/icons-material';
+import EditRoundedIcon from '@mui/icons-material/EditRounded';
+
+
 
 var CustomMap: { [key: string]: any } = {};
+
 function App() {
   const [todo, setTodo] = React.useState("");
   const [todoList, setTodoList] = React.useState<string[]>([]);
@@ -44,9 +48,8 @@ function App() {
     setTodoList(toSave);
   }
   
-  const enterTodo: MouseEventHandler<Element> = () => {
+  const saveTodo = () => {
     const existingList = getExistingList();
-    console.log(todo);
     if (editTodoIdx != null) {
       existingList[editTodoIdx] = todo;
     } else {
@@ -54,15 +57,25 @@ function App() {
     }
     localStorage.setItem("todoList", JSON.stringify(existingList));
     setTodoList(existingList);
-    setTodo("");
     setEditTodoIdx(null);
+    setTodo("");
+  }
+  
+  const enterTodo: MouseEventHandler<Element> = () => {
+    saveTodo();
   };
+
+  const handleKeyDown = (event: any) => {
+    if(event.key === 'Enter') {
+      saveTodo();
+    }
+  }
   
   const editTodo: MouseEventHandler<Element> = (btn: React.MouseEvent<HTMLElement>) => {
-    let temp = btn.target as HTMLTextAreaElement;
     const existingList = getExistingList();
-    const nBeingEdited = Number(temp.value);
-    const todo = existingList[Number(temp.value)];
+    const todoIdxNo = (btn.currentTarget as any).value;
+    const nBeingEdited = Number(todoIdxNo);
+    const todo = existingList[Number(todoIdxNo)];
     setTodo(todo);
     setEditTodoIdx(nBeingEdited);
   }
@@ -79,16 +92,16 @@ function App() {
     localStorage.setItem('doneMap', JSON.stringify(doneMap));
 
   }
-  const markDone: MouseEventHandler<Element> = (btn: React.MouseEvent<HTMLElement>) => {
+  /* const markDone: MouseEventHandler<Element> = (btn: React.MouseEvent<HTMLElement>) => {
     const idxNoStr = (btn.target as HTMLTextAreaElement).value;
     saveDoneTodo(idxNoStr);
-  }
+  } */
   const markDoneChange: ChangeEventHandler<Element> = (event: ChangeEvent) => {
     var elem = event.target as HTMLTextAreaElement;
     saveDoneTodo(elem.value);
   }
   const deleteTodo: MouseEventHandler<Element> = (btn: React.MouseEvent<HTMLElement>) => {
-    const idxNoStr = (btn.target as HTMLTextAreaElement).value;
+    const idxNoStr = (btn.currentTarget as any).value;
     const idx = Number(idxNoStr);
     const existingList = getExistingList();
     existingList.splice(idx, 1);
@@ -96,49 +109,51 @@ function App() {
   }
   return (
     <div className="App">
-      <header>
-        <h2> </h2>
-      </header>
-      <div>
+      <div style={{paddingTop: 10}}>
         <div>
           <div className='TodoArea'>
-          <Card sx={{ minWidth: 275 }}>
-          <Typography sx={{ fontSize: 18 }} color="text.secondary" gutterBottom>
-            React todo list with Typescript & MUI
+          <Card sx={{ minWidth: 550, maxWidth: 550 }}>
+            <Typography sx={{ fontSize: 18 }} color="text.secondary" gutterBottom>
+              React todo list with Typescript & MUI
+            </Typography>
             <hr />
-          </Typography>
-            <CardContent>
-            <div>
-              <TextField id="standard-basic" label="Enter todo" variant="standard"  onChange={handleChange} value={todo} />
-            </div>
-            <div style={{ marginTop: 20}}>
-              <Button variant="contained" onClick={enterTodo}>Add todo </Button>
-            </div>
-            <List>
-              {todoList.map( (t:string, idx: number) => (
-                <ListItem>
-                  <ListItemIcon>
-                    <Checkbox
-                      value={"" + idx}
-                      edge="start"
-                      checked={doneMap[idx] ? true: false}
-                      tabIndex={-1}
-                      disableRipple
-                      onChange={markDoneChange}
-                      />
-                  </ListItemIcon>
-                  <ListItemText primary={t} />
-                  <IconButton value={""+idx} onClick={editTodo}>
-                      <BorderColor />
-                  </IconButton>
-                  <IconButton style={{marginLeft: 10}} value={""+idx} onClick={deleteTodo}>
-                    <Delete />
-                  </IconButton>
-                </ListItem>
-              ))}
 
-            </List>
-            </CardContent>
+              <CardContent>
+              <div>
+                <TextField id="standard-basic" label="Enter todo" variant="standard"  
+                  onChange={handleChange} 
+                  value={todo}
+                  onKeyDown={handleKeyDown} />
+              </div>
+              <div style={{ marginTop: 20}}>
+                <Button variant="contained" onClick={enterTodo}>Add todo </Button>
+              </div>
+              <List>
+                {todoList.map( (t:string, idx: number) => (
+                  <ListItem key={idx}>
+                    <ListItemIcon>
+                      <Checkbox
+                        value={"" + idx}
+                        edge="start"
+                        checked={doneMap[idx] ? true: false}
+                        tabIndex={-1}
+                        disableRipple
+                        onChange={markDoneChange}
+                        />
+                    </ListItemIcon>
+                    <ListItemText primary={t} />
+                    <IconButton value={""+idx} onClick={editTodo}>
+                        <EditRoundedIcon />
+                    </IconButton>
+                    <IconButton style={{marginLeft: 10}} value={""+idx} onClick={deleteTodo}>
+                      <DeleteRounded key={""+idx} />
+                    </IconButton>
+
+                  </ListItem>
+                ))}
+
+              </List>
+              </CardContent>
             </Card>
           </div>
         </div>
