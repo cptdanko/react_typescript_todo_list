@@ -2,14 +2,17 @@
 
 I had never used the yarn package manager before so thought I would give it a try and see what it is like. This is a simple react app built with typescript using the yarn package manager. 
 
-I will be writing a [blogpost] (https://mydaytodo.com/blog/) about my thoughts on building a react app with yarn soon.
+I aim to make this a living repository, in the sense that things can be added to this repo to demostrate certain react concepts. You can read my original post on this [repo over here].
 
-## This repository has ...
-- a todo list app built with react 
-- built using Typescript 
-- has all the CRUD operations
+## This repository ...
+- shows a todo list app built with react and Typescript
+- uses MUI to style components
+- performs all CRUD operations
 - uses localStorage to save data
 - uses yarn as a package manager
+
+This app has also been deployed and served via AWS S3 and CloudFront. [Click the CloudFront link] to check it in your browser.
+
 
 # More great tutorials and code samples
 Checkout [this blog] for more "how-to" code samples, tutorials and just info on how to solve problems.
@@ -18,6 +21,8 @@ If you like what I am doing, you can [buy me a coffee]
 
 Click on the next link for more info on the 13+ year [software engineering career journey] of the author.
 
+[Click the CloudFront link]: https://d2ixyochz87wa3.cloudfront.net/
+[repo over here]: https://mydaytodo.com/build-todo-list-with-reactjs-typescript-yarn/
 [buy me a coffee]: https://www.buymeacoffee.com/bhumansoni
 [software engineering career journey]: https://mydaytodo.com/the-3-stages-of-a-software-engineering-career/
 [this blog]: https://mydaytodo.com/blog/
