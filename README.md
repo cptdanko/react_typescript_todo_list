@@ -6,12 +6,16 @@ I aim to make this a living repository, in the sense that things can be added to
 
 ## This repository ...
 - shows a todo list app built with react and Typescript
-- uses MUI to style components
+- uses Google Oauth for authorisation
 - performs all CRUD operations
+- uses MUI to style components
 - uses localStorage to save data
 - uses yarn as a package manager
 
 This app has also been deployed and served via AWS S3 and CloudFront. [Click the CloudFront link] to check it in your browser.
+
+# How to enable Google Auth
+To use Google Authentication via OAuth you need to copy the client id for your app from the Google Cloud Platform (GCP) dashboard.
 
 
 # More great tutorials and code samples
@@ -19,7 +23,7 @@ Checkout [this blog] for more "how-to" code samples, tutorials and just info on 
 
 If you like what I am doing, you can [buy me a coffee]
 
-Click on the next link for more info on the 13+ year [software engineering career journey] of the author.
+Want to know about my 13+ year [software engineering career journey]?
 
 [Click the CloudFront link]: https://d2ixyochz87wa3.cloudfront.net/
 [repo over here]: https://mydaytodo.com/build-todo-list-with-reactjs-typescript-yarn/
