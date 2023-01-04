@@ -2,6 +2,7 @@ import './App.css';
 import { TodoList } from './components/todolist';
 import { Login } from './components/login';
 import { Typography } from '@mui/material';
+import { Dashboard } from './containers/dashboard';
 
 function App() {
 
@@ -13,8 +14,7 @@ function App() {
             <Typography sx={{ fontSize: 18 }} color="text.secondary" gutterBottom>
                 React todo list with Typescript & MUI
             </Typography>
-            <Login />
-            <TodoList />
+            <Dashboard />
           </div>
       </div>
     </div>
