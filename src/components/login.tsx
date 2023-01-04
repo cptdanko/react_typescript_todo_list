@@ -1,10 +1,10 @@
-import { Button, Card, CardContent, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider } from "@mui/material";
+import { Button, Card, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider } from "@mui/material";
 import { gapi } from "gapi-script";
 import { useEffect, useState } from "react";
 import GoogleLogin, { GoogleLogout } from "react-google-login";
-import { AlertDialog } from "./dialogs/simpleDialog";
 
-export const Login = () => {
+export const Login = (props: any) => {
+    const { setShowTodo, setUsername } = props; 
     //oauth
     const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID ?? '';
     const [showLogout, setShowLogout] = useState<boolean>(false);
@@ -26,9 +26,12 @@ export const Login = () => {
     });
 
     const onSuccess = (res: any) => {
-        if (res.profileObj) {
+        const userProfile = res.profileObj;
+        if (userProfile) {
             setLoginDialogMsg(SUCCESSFULL_LOGIN_MSG);
-            setLoginDialogTitle('Hi '+ res.profileObj.givenName);
+            setUsername(userProfile.givenName);
+            setLoginDialogTitle('Hi '+ userProfile.givenName);
+            setShowTodo(true);
             setShowLogout(true);
             setShowGLogin(false);
             setOpenDialog(true);
@@ -85,7 +88,6 @@ export const Login = () => {
                     <Button onClick={handleClose}>Ok</Button>
                 </DialogActions>
             </Dialog>
-
         </Card>
     )
 }
