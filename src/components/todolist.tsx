@@ -85,7 +85,7 @@ export const TodoList = () => {
 
     return (
         <Card>
-            <CardContent sx={{ minWidth: 500, maxWidth: 500 }}>
+            <CardContent>
                 <div>
                     <TextField id="standard-basic" label="Enter todo" variant="standard"
                         onChange={handleChange}

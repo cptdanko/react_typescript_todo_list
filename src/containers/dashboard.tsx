@@ -43,7 +43,7 @@ export const Dashboard = () => {
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        {'You can get a feel of how to app is, but the app will have very limited functionality'}
+                        {'You can get a feel of how to app is, but it will have limited functionality'}
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
