@@ -48,3 +48,15 @@
     transform: rotate(360deg);
   }
 }
+
+.CustomCard {
+  min-width: 600px;
+  max-width: 800px;
+}
+
+@media only screen and (min-device-width: 320px) and (max-device-width: 600px) {
+  .CustomCard {
+    min-width: 100%;
+    max-width: 100%;
+  }
+}
