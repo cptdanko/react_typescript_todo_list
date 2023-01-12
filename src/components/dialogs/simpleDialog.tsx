@@ -19,6 +19,7 @@ export const SimpleDialog = (props: any) => {
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
+        data-testid="simpleDialog"
       >
         <DialogTitle id="alert-dialog-title">
           { dialogHeader }
