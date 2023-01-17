@@ -6,6 +6,8 @@ import {
 import { gapi } from "gapi-script";
 import { useEffect, useState } from "react";
 import GoogleLogin, { GoogleLogout } from "react-google-login";
+import { addNewUser, getUserByEmail } from "../backend/db";
+import { UserSession } from "../backend/session";
 import { SimpleDialog } from "./dialogs/simpleDialog";
 
 export const Login = (props: any) => {
@@ -21,6 +23,8 @@ export const Login = (props: any) => {
   const [name, setName] = useState<string>("");
   const SUCCESSFULL_LOGIN_MSG = "You are logged in using your Google ID";
   const FAILED_LOGIN_MSG = "Login with Google ID failed";
+  
+  const session = UserSession.Instance;
 
   useEffect(() => {
     const initClient = () => {
@@ -32,13 +36,26 @@ export const Login = (props: any) => {
     gapi.load("client:auth2", initClient);
   });
 
-  const onSuccess = (res: any) => {
+  const onSuccess = async (res: any) => {
     const userProfile = res.profileObj;
     if (userProfile) {
+
+      let userObj = await getUserByEmail(userProfile.email);
+      if(!userObj) {
+        // create the user, save it to DB
+        const userData = {
+          "username": userProfile.givenName,
+          "name": userProfile.givenName,
+          "email": userProfile.email,
+        };
+        userObj = await addNewUser(userData);
+      }
+      session.startUserSession(userObj);
       setLoginDialogMsg(SUCCESSFULL_LOGIN_MSG);
       setUsername(userProfile.givenName);
       const greeting = "Hi " + userProfile.givenName;
       setLoginDialogTitle(greeting);
+
       setName(greeting);
       setLogoutMsg("Logout");
       setShowTodo(true);
@@ -52,6 +69,7 @@ export const Login = (props: any) => {
     setLoginDialogMsg(`${FAILED_LOGIN_MSG} - ${res.error}`);
     setLoginDialogTitle("Login Failed");
     setOpenDialog(true);
+    session.endUserSession();
   };
   const logout = () => {
     setShowLogout(false);
@@ -60,6 +78,7 @@ export const Login = (props: any) => {
     setLoginDialogTitle("Logged out");
     setLoginDialogMsg("Logout successful");
     setOpenDialog(true);
+    session.endUserSession();
   };
   const handleClose = () => {
     setOpenDialog(false);

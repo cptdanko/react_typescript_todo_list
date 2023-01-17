@@ -1,6 +1,7 @@
 import { Box, Tabs, Tab, Card, Typography } from "@mui/material";
 import { useState } from "react";
 import { TodoList } from "../components/todolist";
+import { WeatherComopnent } from "../components/weather";
 
 interface TabPanelProps {
   children?: React.ReactNode;
