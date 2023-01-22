@@ -94,7 +94,7 @@ export const TodoList = () => {
   };
 
   const handleChange: ChangeEventHandler<Element> = (event: ChangeEvent) => {
-    var elem = event.target as HTMLTextAreaElement;
+    const elem = event.target as HTMLTextAreaElement;
     setTodo(elem.value);
   };
   const handleKeyDown = (event: any) => {

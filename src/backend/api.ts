@@ -1,5 +1,5 @@
 const WEATHER_ENDPOINT = "/weather";
-interface Weather {
+export type Weather = {
     min: number,
     max: number,
     current: number
@@ -9,6 +9,8 @@ interface Weather {
 //a private method
 const processWeatherData = (data: any): Weather  => {
     const { main, weather } = data;
+    console.log('The Weather data is');
+    console.log(JSON.stringify(data));
     const weatherData: Weather = {
         min: main.temp_min,
         max: main.temp_max,
@@ -18,7 +20,7 @@ const processWeatherData = (data: any): Weather  => {
     };
     return weatherData;
 }
-export const getWeather = async (city: string): Promise<any> => {
+export const getWeather = async (city: string): Promise<Weather> => {
 
     const url = `${WEATHER_ENDPOINT}?city=${city}`;
     return new Promise((resolve, reject) => {

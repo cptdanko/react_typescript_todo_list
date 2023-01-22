@@ -1,6 +1,7 @@
 import { Box, Tabs, Tab, Card, Typography } from "@mui/material";
 import { useState } from "react";
 import { TodoList } from "../components/todolist";
+import { WeatherComopnent } from "../components/weather";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -83,7 +84,9 @@ export const TabLayout = (props: any) => {
         <Card sx={{ padding: 10 }}>Coming soon</Card>
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <Card sx={{ padding: 10 }}>Coming soon</Card>
+        <Card sx={{ padding: 10 }}>
+          <WeatherComopnent />
+        </Card>
       </TabPanel>
       <TabPanel value={value} index={3}>
         <Card sx={{ padding: 10 }}>Coming soon</Card>
