@@ -19,7 +19,7 @@ import React, {
   useState,
 } from "react";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
-import { getExistingList, saveTodoList } from "../dataStore/db";
+import { getExistingList, saveTodoList } from "../backend/db";
 import { Todo } from "../customTypes";
 
 export const TodoList = () => {
@@ -94,7 +94,7 @@ export const TodoList = () => {
   };
 
   const handleChange: ChangeEventHandler<Element> = (event: ChangeEvent) => {
-    var elem = event.target as HTMLTextAreaElement;
+    const elem = event.target as HTMLTextAreaElement;
     setTodo(elem.value);
   };
   const handleKeyDown = (event: any) => {
