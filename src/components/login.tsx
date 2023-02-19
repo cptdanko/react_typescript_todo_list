@@ -1,6 +1,7 @@
 import {
   Card,
   Divider,
+  Typography,
 } from "@mui/material";
 import { gapi } from "gapi-script";
 import { useEffect, useState } from "react";
@@ -17,6 +18,7 @@ export const Login = (props: any) => {
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const [loginDialogMsg, setLoginDialogMsg] = useState<string>("");
   const [loginDialogTitle, setLoginDialogTitle] = useState<string>("");
+  const [name, setName] = useState<string>("");
   const SUCCESSFULL_LOGIN_MSG = "You are logged in using your Google ID";
   const FAILED_LOGIN_MSG = "Login with Google ID failed";
 
@@ -35,8 +37,10 @@ export const Login = (props: any) => {
     if (userProfile) {
       setLoginDialogMsg(SUCCESSFULL_LOGIN_MSG);
       setUsername(userProfile.givenName);
-      setLoginDialogTitle("Hi " + userProfile.givenName);
-      setLogoutMsg(`Logout ${userProfile.givenName}`);
+      const greeting = "Hi " + userProfile.givenName;
+      setLoginDialogTitle(greeting);
+      setName(greeting);
+      setLogoutMsg("Logout");
       setShowTodo(true);
       setShowLogout(true);
       setShowGLogin(false);
@@ -77,7 +81,14 @@ export const Login = (props: any) => {
       )}
       <Divider />
       {showLogout ? (
-        <GoogleLogout buttonText={logoutMsg} onLogoutSuccess={logout} clientId={GOOGLE_CLIENT_ID} />
+        <>
+          <Typography variant="h4" component="h4" sx={{padding: 1}}>
+            {name}
+          </Typography>
+          <div>
+            <GoogleLogout buttonText={logoutMsg} onLogoutSuccess={logout} clientId={GOOGLE_CLIENT_ID} />
+          </div>
+        </>
       ) : (
         ""
       )}
