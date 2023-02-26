@@ -10,7 +10,7 @@ function App() {
       <div style={{paddingTop: 10}} className="HomeScreen">
           <div className='TodoArea'>
             <Typography sx={{ fontSize: 18 }} color="text.secondary" gutterBottom>
-                React todo list with Typescript & MUI
+                My Day ToDos
             </Typography>
             <Dashboard />
           </div>
