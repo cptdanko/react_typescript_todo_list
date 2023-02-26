@@ -28,7 +28,17 @@ export const TodoList = () => {
   const [editTodoIdx, setEditTodoIdx] = useState<number | null>();
 
   useEffect(() => {
-    setTodoList(getExistingList());
+    getExistingList().then(response => {
+      console.log(typeof response);
+      if(typeof response === "string") {
+        console.log("Error fetching" + response);
+      } else {
+        setTodoList(response);
+      }
+    }).catch(e => {
+      console.error(e);
+    })
+    
   }, []);
 
   const saveList = (toSave: Todo[]) => {
@@ -42,8 +52,8 @@ export const TodoList = () => {
     const existingList = getExistingList();
     const todoIdxNo = (btn.currentTarget as any).value;
     const nBeingEdited = Number(todoIdxNo);
-    const todo = existingList[Number(todoIdxNo)];
-    setTodo(todo.text);
+    //const todo = existingList[Number(todoIdxNo)];
+    //setTodo(todo.text);
     setEditTodoIdx(nBeingEdited);
   };
 
@@ -53,8 +63,8 @@ export const TodoList = () => {
     const idxNoStr = (btn.currentTarget as any).value;
     const idx = Number(idxNoStr);
     const existingList = getExistingList();
-    existingList.splice(idx, 1);
-    saveList(existingList);
+    // existingList.splice(idx, 1);
+    // saveList(existingList);
     if (editTodoIdx === idx) {
       setEditTodoIdx(null);
       setTodo("");
@@ -64,8 +74,8 @@ export const TodoList = () => {
   const saveDoneTodo = (idxNoStr: string) => {
     const list = getExistingList();
     const idx = Number(idxNoStr);
-    list[idx].done = !list[idx].done;
-    saveList(list);
+    // list[idx].done = !list[idx].done;
+    // saveList(list);
   };
 
   const markDoneChange: ChangeEventHandler<Element> = (event: ChangeEvent) => {
@@ -74,7 +84,7 @@ export const TodoList = () => {
   };
 
   const saveTodo = () => {
-    const existingList = getExistingList();
+    /*const existingList = getExistingList();
     if (editTodoIdx != null) {
       const todoBeingEdited = existingList[editTodoIdx];
       todoBeingEdited.text = todo;
@@ -82,9 +92,9 @@ export const TodoList = () => {
     } else {
       const tObj = new Todo(todo, false);
       existingList.push(tObj);
-    }
-    saveTodoList(existingList);
-    setTodoList(existingList);
+    }*/
+    //saveTodoList(existingList);
+    // setTodoList(existingList);
     setEditTodoIdx(null);
     setTodo("");
   };
