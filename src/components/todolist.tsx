@@ -19,15 +19,19 @@ import React, {
   useState,
 } from "react";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
-import { getExistingList, saveTodoList } from "../backend/db";
+import { getExistingList, saveTodoList, saveTodoToDB } from "../backend/db";
 import { Todo } from "../customTypes";
+import { UserSession } from "../backend/session";
 
 export const TodoList = () => {
   const [todo, setTodo] = useState("");
   const [todoList, setTodoList] = useState<Todo[]>([]);
   const [editTodoIdx, setEditTodoIdx] = useState<number | null>();
 
+  const session = UserSession.Instance;
+
   useEffect(() => {
+    console.log("in todo list useeffect");
     getExistingList().then(response => {
       console.log(typeof response);
       if(typeof response === "string") {
@@ -71,9 +75,11 @@ export const TodoList = () => {
     }
   };
 
-  const saveDoneTodo = (idxNoStr: string) => {
-    const list = getExistingList();
+  const saveDoneTodo = async (idxNoStr: string) => {
+    const list = await getExistingList();
     const idx = Number(idxNoStr);
+    todoList[idx].done = !todoList[idx].done;
+    setTodoList(todoList);
     // list[idx].done = !list[idx].done;
     // saveList(list);
   };
@@ -83,7 +89,13 @@ export const TodoList = () => {
     saveDoneTodo(elem.value);
   };
 
-  const saveTodo = () => {
+  const saveTodo = async () => {
+    const tObj = new Todo(todo, false);
+    tObj.user_id = session.getUserIdInSession() ?? "";
+    tObj.date = new Date();
+    const todoSaved = await saveTodoToDB(tObj);
+    console.log(todoSaved);
+
     /*const existingList = getExistingList();
     if (editTodoIdx != null) {
       const todoBeingEdited = existingList[editTodoIdx];
@@ -142,7 +154,6 @@ export const TodoList = () => {
                   value={"" + idx}
                   edge="start"
                   checked={t.done ? true : false}
-                  tabIndex={-1}
                   disableRipple
                   onChange={markDoneChange}
                 />

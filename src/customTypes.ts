@@ -17,3 +17,16 @@ export class Todo {
         this.date = date;
     }
 }
+
+export class User {
+
+    user_id: string;
+    email: string;
+    name?: string;
+
+    constructor(userId: string, email: string, name?: string) {
+        this.user_id = userId;
+        this.email = email;
+        this.name = name;
+    }
+}

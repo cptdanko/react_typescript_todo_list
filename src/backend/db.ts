@@ -1,5 +1,5 @@
 import { gapi } from "gapi-script";
-import { Todo } from "../customTypes";
+import { Todo, User } from "../customTypes";
 import { getWeather } from "./api";
 
 const TODO_SAVE_KEY = "todoList";
@@ -7,21 +7,19 @@ let todoList: Todo[] = [];
 
 export const getExistingList = (): Promise<Todo[] | string> => {
   const list: Todo[] = [];
+  const token = gapi.auth;
+  //const baseUrl = "https://api.mydaytodos.com"
   return new Promise((resolve, reject) => {
     fetch("/todos", {
       method: "GET", // *GET, POST, PUT, DELETE, etc.
       /*headers: {
                 "aws-cloud": "true"
             }*/
-    })
-      .then((resp) => resp.json())
+    }).then((resp) => resp.json())
       .then((data) => {
-        console.log("About to iterate through todo data in db.ts");
-
         data.forEach((element: any) => {
           try {
             const d = new Date(Date.parse(element["date"]));
-            console.log(d);
             const t = new Todo(
               element["text"],
               JSON.parse(element["done"]),
@@ -62,3 +60,49 @@ export const saveTodoList = (list: Todo[]) => {
     todoList = list;
   }
 };
+
+export const saveTodoToDB = (todo: Todo): Promise<Todo> => {
+  return new Promise((resolve, reject) => {
+    fetch('/todo/', {
+      method: "POST",
+      body: JSON.stringify(todo),
+    }).then(resp => resp.json())
+    .then(data => {
+      resolve(data);
+    })
+    .catch(err => {
+      reject(err);
+    })
+  });
+}
+export const getUserByEmail = (email: string): Promise<User> => {
+  return new Promise((resolve, reject) => {
+    return fetch(`/user/by/email/${email}`, {
+      method: "GET"
+    }).then(res => res.json())
+    .then(data => {
+      if(data) {
+        if(data.length > 1) {
+          reject({"msg": "500: server side error - Too many users"});
+        } else {
+          resolve(data[0]);
+        }
+      }
+    }).catch(err => {
+      reject(err);
+    })
+  })
+};
+
+export const addNewUser = (user: any): Promise<any> => {
+  return new Promise((resolve, reject) => {
+    fetch('/user/', {
+      method: "POST",
+      body: user
+    }).then(resp => resp.json())
+    .then(data => {
+      resolve(data);
+    })
+    .catch(err => reject(err));
+  });
+}
