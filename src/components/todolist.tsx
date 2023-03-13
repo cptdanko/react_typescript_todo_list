@@ -19,14 +19,16 @@ import React, {
   useState,
 } from "react";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
-import { getExistingList, saveTodoList, saveTodoToDB } from "../backend/db";
+import { getExistingList, saveTodoList, saveTodoToDB, updateTodo } from "../backend/db";
 import { Todo } from "../customTypes";
 import { UserSession } from "../backend/session";
+import { SimpleDialog } from "./dialogs/simpleDialog";
 
 export const TodoList = () => {
   const [todo, setTodo] = useState("");
   const [todoList, setTodoList] = useState<Todo[]>([]);
   const [editTodoIdx, setEditTodoIdx] = useState<number | null>();
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
 
   const session = UserSession.Instance;
 
@@ -53,11 +55,10 @@ export const TodoList = () => {
   const editTodo: MouseEventHandler<Element> = (
     btn: React.MouseEvent<HTMLElement>
   ) => {
-    const existingList = getExistingList();
     const todoIdxNo = (btn.currentTarget as any).value;
     const nBeingEdited = Number(todoIdxNo);
-    //const todo = existingList[Number(todoIdxNo)];
-    //setTodo(todo.text);
+    const todo = todoList[todoIdxNo];
+    setTodo(todo.text);
     setEditTodoIdx(nBeingEdited);
   };
 
@@ -90,24 +91,22 @@ export const TodoList = () => {
   };
 
   const saveTodo = async () => {
-    const tObj = new Todo(todo, false);
-    tObj.user_id = session.getUserIdInSession() ?? "";
-    tObj.date = new Date();
-    const todoSaved = await saveTodoToDB(tObj);
-    console.log(todoSaved);
-    todoList.push(todoSaved);
-    setTodoList(todoList);
-    /*const existingList = getExistingList();
     if (editTodoIdx != null) {
-      const todoBeingEdited = existingList[editTodoIdx];
+      const todoBeingEdited = todoList[editTodoIdx];
       todoBeingEdited.text = todo;
-      existingList[editTodoIdx] = todoBeingEdited;
+      todoList[editTodoIdx].text = todo;
+      const updateResult = await updateTodo(todoBeingEdited);
+      if(updateResult >= 300) {
+        setOpenDialog(true);
+      }
     } else {
       const tObj = new Todo(todo, false);
-      existingList.push(tObj);
-    }*/
-    //saveTodoList(existingList);
-    // setTodoList(existingList);
+      tObj.user_id = session.getUserIdInSession() ?? "";
+      tObj.date = new Date();
+      const todoSaved = await saveTodoToDB(tObj);
+      todoList.push(todoSaved);
+      setTodoList(todoList);
+    }
     setEditTodoIdx(null);
     setTodo("");
   };
@@ -124,6 +123,10 @@ export const TodoList = () => {
     if (event.key === "Enter") {
       saveTodo();
     }
+  };
+
+  const handleClose = () => {
+    setOpenDialog(false);
   };
 
   return (
@@ -174,6 +177,14 @@ export const TodoList = () => {
           ))}
         </List>
       </CardContent>
+
+      <SimpleDialog
+        openDialog={openDialog}
+        handleClose={handleClose}
+        dialogHeader="Error"
+        dialogMessage="Error updating your todo, try again later"
+      />
+
     </Card>
   );
 };

@@ -80,6 +80,22 @@ export const saveTodoToDB = (todo: Todo): Promise<Todo> => {
     })
   });
 }
+export const updateTodo = (todo: Todo): Promise<any> => {
+
+  return new Promise((resolve, reject) => {
+    fetch(`/todo?id=${todo.id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(todo)
+    }).then(resp => {
+      resolve(resp.status);
+    }).catch(err => {
+      reject(err);
+    })
+  });
+}
 export const getUserByEmail = (email: string): Promise<User> => {
   return new Promise((resolve, reject) => {
     return fetch(`/user/by/email/${email}`, {
@@ -111,3 +127,5 @@ export const addNewUser = (user: any): Promise<any> => {
     .catch(err => reject(err));
   });
 }
+
+
