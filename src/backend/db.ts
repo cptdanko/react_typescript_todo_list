@@ -62,9 +62,14 @@ export const saveTodoList = (list: Todo[]) => {
 };
 
 export const saveTodoToDB = (todo: Todo): Promise<Todo> => {
+  console.log(`db.ts -> About to save todo ${JSON.stringify(todo)}`);
   return new Promise((resolve, reject) => {
     fetch('/todo/', {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+      },
       body: JSON.stringify(todo),
     }).then(resp => resp.json())
     .then(data => {

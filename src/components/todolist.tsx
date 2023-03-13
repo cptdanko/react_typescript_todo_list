@@ -95,7 +95,8 @@ export const TodoList = () => {
     tObj.date = new Date();
     const todoSaved = await saveTodoToDB(tObj);
     console.log(todoSaved);
-
+    todoList.push(todoSaved);
+    setTodoList(todoList);
     /*const existingList = getExistingList();
     if (editTodoIdx != null) {
       const todoBeingEdited = existingList[editTodoIdx];
