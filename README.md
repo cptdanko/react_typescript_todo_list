@@ -11,21 +11,24 @@ I aim to make this a living repository, in the sense that things can be added to
 - uses MUI to style components
 - uses localStorage to save data
 - uses yarn as a package manager
+- integrates with a NodeJS Typescript backend
 
-This app has also been deployed and served via AWS S3 and CloudFront. [Click the CloudFront link] to check it in your browser.
+You can see all the code for the backend in the [node_typescript_crud_notes] repository.
+
+This app has also been deployed and can be accessed at [My Day Todos site].
 
 # How to enable Google Auth
 To use Google Authentication via OAuth you need to copy the client id for your app from the Google Cloud Platform (GCP) dashboard.
-
 
 # More great tutorials and code samples
 Checkout [this blog] for more "how-to" code samples, tutorials and just info on how to solve problems.
 
 If you like what I am doing, you can [buy me a coffee]
 
-Want to know about my 13+ year [software engineering career journey]?
+Want to know about my (Bhuman Soni) [software engineering career journey] so far?
 
-[Click the CloudFront link]: https://d2ixyochz87wa3.cloudfront.net/
+[node_typescript_crud_notes]: https://github.com/cptdanko/node_typescript_crud_notes
+[My Day Todos site]: https://mydaytodos.com
 [repo over here]: https://mydaytodo.com/build-todo-list-with-reactjs-typescript-yarn/
 [buy me a coffee]: https://www.buymeacoffee.com/bhumansoni
 [software engineering career journey]: https://mydaytodo.com/the-3-stages-of-a-software-engineering-career/
