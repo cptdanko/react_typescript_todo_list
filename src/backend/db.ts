@@ -1,20 +1,19 @@
 import { gapi } from "gapi-script";
 import { Todo, User } from "../customTypes";
-import { getWeather } from "./api";
 
 const TODO_SAVE_KEY = "todoList";
 let todoList: Todo[] = [];
+const BASE_URL=process.env.REACT_APP_BASE_URL;
 
 export const getExistingList = (): Promise<Todo[] | string> => {
   const list: Todo[] = [];
-  const token = gapi.auth;
   //const baseUrl = "https://api.mydaytodos.com"
   return new Promise((resolve, reject) => {
-    fetch("/todos", {
+    fetch(`${BASE_URL}/todos`, {
       method: "GET", // *GET, POST, PUT, DELETE, etc.
-      /*headers: {
-                "aws-cloud": "true"
-            }*/
+      headers: {
+        "x-api-key": process.env.REACT_APP_API_KEY ?? '',
+      }
     }).then((resp) => resp.json())
       .then((data) => {
         data.forEach((element: any) => {
@@ -64,11 +63,11 @@ export const saveTodoList = (list: Todo[]) => {
 export const saveTodoToDB = (todo: Todo): Promise<Todo> => {
   console.log(`db.ts -> About to save todo ${JSON.stringify(todo)}`);
   return new Promise((resolve, reject) => {
-    fetch('/todo/', {
+    fetch(`${BASE_URL}/todo/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        // 'Content-Type': 'application/x-www-form-urlencoded',
+        "x-api-key": process.env.REACT_APP_API_KEY ?? '',
       },
       body: JSON.stringify(todo),
     }).then(resp => resp.json())
@@ -84,10 +83,11 @@ export const saveTodoToDB = (todo: Todo): Promise<Todo> => {
 export const updateTodo = (todo: Todo): Promise<any> => {
 
   return new Promise((resolve, reject) => {
-    fetch(`/todo?id=${todo.id}`, {
+    fetch(`${BASE_URL}/todo?id=${todo.id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
+        "x-api-key": process.env.REACT_APP_API_KEY ?? '',
       },
       body: JSON.stringify(todo)
     }).then(resp => {
@@ -100,8 +100,11 @@ export const updateTodo = (todo: Todo): Promise<any> => {
 
 export const deleteTodoFromDB = (todoId: string): Promise<number> => {
   return new Promise((resolve, reject) => {
-    fetch(`/todo?id=${todoId}`, {
-      method: "DELETE"
+    fetch(`${BASE_URL}/todo?id=${todoId}`, {
+      method: "DELETE",
+      headers: {
+        "x-api-key": process.env.REACT_APP_API_KEY ?? '',
+      }
     }).then(resp => {
       resolve(resp.status);
     }).catch(err =>{
@@ -112,8 +115,11 @@ export const deleteTodoFromDB = (todoId: string): Promise<number> => {
 
 export const getUserByEmail = (email: string): Promise<User> => {
   return new Promise((resolve, reject) => {
-    return fetch(`/user/by/email/${email}`, {
-      method: "GET"
+    return fetch(`${BASE_URL}/user/by/email/${email}`, {
+      method: "GET",
+      headers: {
+        "x-api-key": process.env.REACT_APP_API_KEY ?? '',
+      }
     }).then(res => res.json())
     .then(data => {
       if(data) {
@@ -131,9 +137,12 @@ export const getUserByEmail = (email: string): Promise<User> => {
 
 export const addNewUser = (user: any): Promise<any> => {
   return new Promise((resolve, reject) => {
-    fetch('/user/', {
+    fetch(`${BASE_URL}/user/`, {
       method: "POST",
-      body: user
+      body: user,
+      headers: {
+        "x-api-key": process.env.REACT_APP_API_KEY ?? '',
+      }
     }).then(resp => resp.json())
     .then(data => {
       resolve(data);

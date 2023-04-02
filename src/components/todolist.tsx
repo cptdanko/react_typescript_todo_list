@@ -29,13 +29,14 @@ export const TodoList = () => {
   const [todoList, setTodoList] = useState<Todo[]>([]);
   const [editTodoIdx, setEditTodoIdx] = useState<number | null>();
   const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const [triggerUpdate, setTriggerUpdate] = useState<boolean>(false);
 
   const session = UserSession.Instance;
 
   useEffect(() => {
-    console.log("IN THE USEEFFECT HOOK");
     getExistingList().then(response => {
-      console.log(JSON.stringify(typeof response));
+      console.log("In todo list useEffect");
+      console.log(JSON.stringify(response));
       if(typeof response === "string") {
         console.log("Error fetching" + response);
       } else {
@@ -64,39 +65,29 @@ export const TodoList = () => {
     const idx = Number(idxNoStr);
     const todo = todoList[idx];
     delRemove(todo.id, idx);
-    if(idx == editTodoIdx) {
+    if(idx === editTodoIdx) {
       setEditTodoIdx(null);
     }
   };
 
   const delRemove = async (todoId: string, idx: number) => {
     const delResp = await deleteTodoFromDB(todoId);
-    console.log(`Delete response ${JSON.stringify(delResp)}`);
     if(typeof delResp != "number") {
       console.log(`Error deleting todo, because ${delResp}`);
+      return;
     }
     delete todoList[idx];
-    setTodoList(todoList);
-    // window.location.reload();
-    /*console.log(todoList);
-    todoList.splice(idx, 1);
-    console.log(todoList);
-    setTodoList(todoList);*/
-    
+    setTodoList(todoList); 
+    setTriggerUpdate(!triggerUpdate);   
   }
 
-  const saveDoneTodo = async (idxNoStr: string) => {
-    const list = await getExistingList();
-    const idx = Number(idxNoStr);
-    todoList[idx].done = !todoList[idx].done;
-    setTodoList(todoList);
-    // list[idx].done = !list[idx].done;
-    // saveList(list);
-  };
-
-  const markDoneChange: ChangeEventHandler<Element> = (event: ChangeEvent) => {
+  const markDoneChange: ChangeEventHandler<Element> = async (event: ChangeEvent) => {
     var elem = event.target as HTMLTextAreaElement;
-    saveDoneTodo(elem.value);
+    const idx = Number(elem.value);
+    const tEdit = todoList[idx];
+    tEdit.done = !tEdit.done;
+    await updateTodo(todoList[idx]);
+    setTriggerUpdate(!triggerUpdate);
   };
 
   const saveTodo = async () => {
@@ -123,7 +114,7 @@ export const TodoList = () => {
   const enterTodo: MouseEventHandler<Element> = () => {
     saveTodo();
   };
-
+  
   const handleChange: ChangeEventHandler<Element> = (event: ChangeEvent) => {
     const elem = event.target as HTMLTextAreaElement;
     setTodo(elem.value);
@@ -151,7 +142,6 @@ export const TodoList = () => {
             onKeyDown={handleKeyDown}
             multiline={true}
             fullWidth={true}
-
           />
         </div>
         <div style={{ marginTop: 20 }}>
@@ -193,7 +183,6 @@ export const TodoList = () => {
         dialogHeader="Error"
         dialogMessage="Error updating your todo, try again later"
       />
-
     </Card>
   );
 };

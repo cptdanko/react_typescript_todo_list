@@ -39,7 +39,6 @@ export const Login = (props: any) => {
   const onSuccess = async (res: any) => {
     const userProfile = res.profileObj;
     if (userProfile) {
-
       let userObj = await getUserByEmail(userProfile.email);
       if(!userObj) {
         // create the user, save it to DB
