@@ -7,10 +7,9 @@ const BASE_URL=process.env.REACT_APP_BASE_URL;
 
 export const getExistingList = (): Promise<Todo[] | string> => {
   const list: Todo[] = [];
-  //const baseUrl = "https://api.mydaytodos.com"
   return new Promise((resolve, reject) => {
     fetch(`${BASE_URL}/todos`, {
-      method: "GET", // *GET, POST, PUT, DELETE, etc.
+      method: "GET",
       headers: {
         "x-api-key": process.env.REACT_APP_API_KEY ?? '',
       }
@@ -34,7 +33,7 @@ export const getExistingList = (): Promise<Todo[] | string> => {
         resolve(list);
       })
       .catch((err) => {
-        const msg = `Err fetching data ${JSON.stringify(err)}`;
+        const msg = `Err fetching data ${JSON.stringify(err.message)}`;
         console.error(msg);
         reject(msg);
       });
@@ -75,7 +74,7 @@ export const saveTodoToDB = (todo: Todo): Promise<Todo> => {
       resolve(data);
     })
     .catch(err => {
-      reject(err);
+      reject(err.message);
     })
   });
 };
@@ -93,7 +92,7 @@ export const updateTodo = (todo: Todo): Promise<any> => {
     }).then(resp => {
       resolve(resp.status);
     }).catch(err => {
-      reject(err);
+      reject(err.message);
     })
   });
 };
@@ -108,7 +107,7 @@ export const deleteTodoFromDB = (todoId: string): Promise<number> => {
     }).then(resp => {
       resolve(resp.status);
     }).catch(err =>{
-      reject(err);
+      reject(err.message);
     })
   }); 
 };
@@ -130,7 +129,7 @@ export const getUserByEmail = (email: string): Promise<User> => {
         }
       }
     }).catch(err => {
-      reject(err);
+      reject(err.message);
     })
   })
 };
@@ -147,7 +146,7 @@ export const addNewUser = (user: any): Promise<any> => {
     .then(data => {
       resolve(data);
     })
-    .catch(err => reject(err));
+    .catch(err => reject(err.message));
   });
 };
 
