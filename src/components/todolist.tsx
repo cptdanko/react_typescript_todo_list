@@ -19,7 +19,7 @@ import React, {
   useState,
 } from "react";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
-import { deleteTodoFromDB, getExistingList, saveTodoList, saveTodoToDB, updateTodo } from "../backend/db";
+import { deleteTodoFromDB, getExistingList, getTodoForUser, saveTodoList, saveTodoToDB, updateTodo } from "../backend/db";
 import { Todo } from "../customTypes";
 import { UserSession } from "../backend/session";
 import { SimpleDialog } from "./dialogs/simpleDialog";
@@ -34,9 +34,8 @@ export const TodoList = () => {
   const session = UserSession.Instance;
 
   useEffect(() => {
-    getExistingList().then(response => {
-      console.log("In todo list useEffect");
-      console.log(JSON.stringify(response));
+    const userId = UserSession.Instance.getUserIdInSession() ?? "";
+    getTodoForUser(userId).then(response => {
       if(typeof response === "string") {
         console.log("Error fetching" + response);
       } else {
@@ -45,7 +44,6 @@ export const TodoList = () => {
     }).catch(e => {
       console.error(e);
     })
-    
   }, []);
 
   const editTodo: MouseEventHandler<Element> = (
