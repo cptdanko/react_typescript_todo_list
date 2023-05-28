@@ -50,6 +50,42 @@ export const getExistingList = (): Promise<Todo[] | string> => {
     }*/
 };
 
+export const getTodoForUser = (userid: string): Promise<Todo[]> => {
+  const list: Todo[] = [];
+  return new Promise((resolve, reject) => {
+    fetch(`${BASE_URL}/todos/forUser?userId=${userid}`, {
+      method: "GET", // *GET, POST, PUT, DELETE, etc.
+      headers: {
+        "x-api-key": process.env.REACT_APP_API_KEY ?? '',
+      }
+    }).then((resp) => resp.json())
+      .then((data) => {
+        data.forEach((element: any) => {
+          try {
+            const d = new Date(Date.parse(element["date"]));
+            const t = new Todo(
+              element["text"],
+              JSON.parse(element["done"]),
+              element["id"],
+              element["user_id"],
+              d
+            );
+            list.push(t);
+          } catch (e) {
+            console.log(e);
+          }
+        });
+        resolve(list);
+      })
+      .catch((err) => {
+        const msg = `Err fetching data ${JSON.stringify(err)}`;
+        console.error(msg);
+        reject(msg);
+      });
+  });
+}
+
+
 export const saveTodoList = (list: Todo[]) => {
   //if logged in or otherwise
   if (gapi.auth.getToken()) {
