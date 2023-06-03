@@ -29,7 +29,7 @@ function a11yProps(index: number) {
   };
 }
 export const TabLayout = (props: any) => {
-  const { username } = props;
+  const { username, loggedInForParent } = props;
 
   return (
     <>

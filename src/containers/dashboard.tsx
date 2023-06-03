@@ -1,6 +1,6 @@
 import { Button, Card } from "@mui/material";
 import { gapi } from "gapi-script";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SimpleDialog } from "../components/dialogs/simpleDialog";
 import { Login } from "../components/login";
 import { TabLayout } from "./tabLayout";
@@ -13,7 +13,12 @@ export const Dashboard = () => {
   const [showTodo, setShowTodo] = useState(false);
   const [username, setUsername] = useState("");
   const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const [loggedInForParent, setLoggedInForParent] = useState<boolean>(false);
 
+  useEffect(() => {
+    setShowTodo(loggedInForParent);
+  });
+  
   const showTodoForm = () => {
     if (!gapi.auth.getToken()) {
       setOpenDialog(true);
@@ -27,7 +32,7 @@ export const Dashboard = () => {
 
   return (
     <Card>
-      <Login setShowTodo={setShowTodo} setUsername={setUsername} />
+      <Login setShowTodo={setShowTodo} setUsername={setUsername} setLoggedInForParent={setLoggedInForParent} />
 
       {showTodo ? (
         <TabLayout username={username} />

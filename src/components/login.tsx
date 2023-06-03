@@ -11,7 +11,7 @@ import { UserSession } from "../backend/session";
 import { SimpleDialog } from "./dialogs/simpleDialog";
 
 export const Login = (props: any) => {
-  const { setShowTodo, setUsername } = props;
+  const { setShowTodo, setUsername, setLoggedInForParent } = props;
   //oauth
   const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID ?? "";
   const [showLogout, setShowLogout] = useState<boolean>(false);
@@ -61,6 +61,7 @@ export const Login = (props: any) => {
       setShowLogout(true);
       setShowGLogin(false);
       setOpenDialog(true);
+      setLoggedInForParent(true);
     }
   };
 
@@ -78,6 +79,7 @@ export const Login = (props: any) => {
     setLoginDialogMsg("Logout successful");
     setOpenDialog(true);
     session.endUserSession();
+    setLoggedInForParent(false);
   };
   const handleClose = () => {
     setOpenDialog(false);
